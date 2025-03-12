@@ -1,0 +1,37 @@
+[package]
+name = "atom-profile"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8", optional = true }
+mongodb = { version = "3.2", optional = true }
+futures = { version = "0.3", optional = true }
+serde_json = "1"
+serde_default = "0.2"
+serde-inline-default = "0.2"
+# simplerecords = "0.1"
+
+atom-services = { path = "../atom-services", default-features = false }
+async-trait = "0.1.87"
+dyn-clone = "1.0.18"
+reqwest = { version = "0.12.12", features = [ "json" ], optional = true }
+
+[dependencies.tokio]
+version = "1"
+features = [
+    "macros",
+    "rt-multi-thread"
+]
+
+[dependencies.serde]
+version = "1"
+features = [
+    "derive"
+]
+
+[features]
+default = [ ]
+core = [ "dep:mongodb", "dep:futures", "dep:axum" ]
+services-core = [ "atom-services/core"]
+services-request = [ "dep:reqwest" ]
