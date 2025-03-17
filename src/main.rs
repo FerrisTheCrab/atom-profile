@@ -19,4 +19,6 @@ async fn main() {
 }
 
 #[cfg(not(feature = "core"))]
-fn main() {}
+fn main() {
+    println!("Core is disabled")
+}
