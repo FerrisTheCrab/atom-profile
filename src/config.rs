@@ -45,6 +45,7 @@ pub struct MasterConfig {
     #[serde_inline_default(8080)]
     pub port: u16,
     #[serde_inline_default(ConnectionType::services())]
+    #[serde(rename = "services-connection")]
     pub services_connection: ConnectionType,
     #[serde(default)]
     pub mongodb: MongoConfig,

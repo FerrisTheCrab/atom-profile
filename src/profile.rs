@@ -88,9 +88,9 @@ impl Profile {
 
         for (k, v) in entries.iter() {
             if v.is_empty() {
-                m_unset.insert(Self::encode(k), v.to_string());
+                m_unset.insert(format!("bucket.{}", Self::encode(k)), v.to_string());
             } else {
-                m_set.insert(Self::encode(k), v.to_string());
+                m_set.insert(format!("bucket.{}", Self::encode(k)), v.to_string());
             }
         }
 
@@ -98,7 +98,7 @@ impl Profile {
             .profiles
             .update_one(
                 doc! { "_id": Bson::Int64(id as i64) },
-                doc! { "$set": doc! { "bucket": m_set} , "$unset": doc!{ "bucket": m_unset}},
+                doc! { "$set": m_set , "$unset": m_unset},
             )
             .await?
             .matched_count
@@ -179,11 +179,11 @@ impl Profile {
         let mut m_set = Document::new();
         let mut m_unset = Document::new();
 
-        for (k, v) in entries.into_iter() {
+        for (k, v) in entries.iter() {
             if v.is_empty() {
-                m_unset.insert(Self::encode(&k), v);
+                m_unset.insert(format!("services.{service}.{}", Self::encode(k)), v.to_string());
             } else {
-                m_set.insert(Self::encode(&k), v);
+                m_set.insert(format!("services.{service}.{}", Self::encode(k)), v.to_string());
             }
         }
 
@@ -191,7 +191,7 @@ impl Profile {
             .profiles
             .update_one(
                 doc! { "_id": Bson::Int64(id as i64) },
-                doc! { "$set": doc! { "services": doc! { service :m_set.clone()}} , "$unset": doc!{ "services": doc!{ service: m_unset}}},
+                doc! { "$set": m_set, "$unset": m_unset},
             )
             .await?
             .matched_count
